@@ -5,14 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
-    
-    public void switchToMap()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
     public void switchToMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene(0);
+    }
+
+    public void switchToMap()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+
+    public void switchToCam()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void switchToQuiz()
+    {
+        SceneManager.LoadScene(3);
+    }
+
+    public void switchToAlbum()
+    {
+        SceneManager.LoadScene(4);
     }
 }
