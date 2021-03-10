@@ -397,9 +397,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7439673855639870896, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7439673855639870896, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 24865176}
+    - target: {fileID: 7439673855639870896, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: switchToScene
+      objectReference: {fileID: 0}
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
       propertyPath: m_Pivot.x
@@ -438,12 +448,12 @@ PrefabInstance:
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -550
+      value: -613.77686
       objectReference: {fileID: 0}
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 130
+      value: 132.85242
       objectReference: {fileID: 0}
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
@@ -483,12 +493,12 @@ PrefabInstance:
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 235
+      value: 306.9
       objectReference: {fileID: 0}
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 108
+      value: 66.4
       objectReference: {fileID: 0}
     - target: {fileID: 7439673855639870897, guid: a92e619c2ef15fb43b0b5a5dbc22a979,
         type: 3}
