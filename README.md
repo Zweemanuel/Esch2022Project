@@ -5,7 +5,6 @@ Software used to manage the project
 ____________________________________
 
 	Google Docs
-------------------------------------
 https://docs.google.com/document/d/1LoI6u9_tSWe0tuaNPBOaClZslOLIS-b2saK70RZp7no/edit
 
 	Trello
