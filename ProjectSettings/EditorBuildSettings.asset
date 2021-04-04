@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AlbumScene.unity
     guid: e8bcc484519d61f47b492b6e77dc8a4e
+  - enabled: 1
+    path: Assets/GoogleMaps/Examples/01_GettingStarted/HelloWorld.unity
+    guid: 219fc20f344ac44c19a4694de15c2eb9
   m_configObjects: {}
