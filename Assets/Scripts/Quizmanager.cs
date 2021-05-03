@@ -77,8 +77,32 @@ public class Quizmanager : MonoBehaviour
     {
         GameObject.Find("Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("ResultCanvas").GetComponent<Canvas>().enabled = true;
+
+        string resultText = "PlaceHolderText";
         GameObject.Find("CongratsText").GetComponentInChildren<Text>().text = "Congratulations!\n You answered "+rightAnswers+" of "+max+" right!";
 
+        switch (rightAnswers)
+        {
+            case 0:
+                resultText = "Unfortunately you didn't answer any questions right.\nGood Look next time!";
+                break;
+            case 1:
+            case 2:
+                resultText = "You answered some questions right.\nYou're nearly there!";
+                break;
+            case 3:
+            case 4:
+                resultText = "Wow! You almost answered all of your Questions correctly!\nCan you do answer them all?";
+                break;
+
+            case 5:
+                resultText = "Congratulations!\n You answered all of your questions right!";
+                break;
+            default:
+                break;
+        }
+
+        GameObject.Find("CongratsText").GetComponentInChildren<Text>().text = resultText;
     }
 
     //Update is called once per frame
