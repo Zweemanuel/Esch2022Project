@@ -84,7 +84,7 @@ public class Quizmanager : MonoBehaviour
         switch (rightAnswers)
         {
             case 0:
-                resultText = "Unfortunately you didn't answer any questions right.\nGood Look next time!";
+                resultText = "You didn't do so well this time.\nBetter Luck next time!";
                 break;
             case 1:
             case 2:
