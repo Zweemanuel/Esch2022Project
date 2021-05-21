@@ -92,92 +92,36 @@ public class slideshow : MonoBehaviour
         }
 
 
-
-
-		if (Input.GetMouseButtonDown(0))
-		{
-
-			UnityEngine.Debug.Log("Pressed primary button.");
-			currentImage++;
-
-			if (currentImage >= SpriteArray.Length)
-				currentImage = 0;
-
-
-			fade();
-		}
-
-		if (Input.GetKey(KeyCode.Space))
-		{
-			UnityEngine.Debug.Log("Pressed space bar.");
-			currentImage++;
-
-			if (currentImage >= SpriteArray.Length)
-				currentImage = 0;
-
-			fade();
-		}
-
-		if (Input.GetKey(KeyCode.RightArrow))
-		{
-			UnityEngine.Debug.Log("Pressed RightArrow.");
-			currentImage++;
-
-			if (currentImage >= SpriteArray.Length)
-				currentImage = 0;
-
-			fade();
-		}
-
-		if (Input.GetMouseButtonDown(1))
-		{
-			UnityEngine.Debug.Log("Pressed secondary button.");
-
-			currentImage--;
-			if (currentImage < 0)
-				currentImage = 0;
-			fade();
-		}
-
-		if (Input.GetKey(KeyCode.Backspace))
-		{
-			UnityEngine.Debug.Log("Pressed Backspace.");
-
-			currentImage--;
-			if (currentImage < 0)
-				currentImage = 0;
-			currentImage = (SpriteArray.Length-1);
-
-			fade();
-		}
-
-		if (Input.GetKey(KeyCode.LeftArrow))
-		{
-			UnityEngine.Debug.Log("Pressed LeftArrow.");
-			currentImage--;
-
-			if (currentImage < 0)
-				currentImage = 0;
-			currentImage = (SpriteArray.Length-1);
-
-			fade();
-		}
-
-		if (Input.GetKey(KeyCode.P))
-		{
-			//ispaused = !ispaused;
-			timer1IsRunning = !timer1IsRunning;
-		}
-
-		void fade()
-		{
-			image1.canvasRenderer.SetAlpha(0.0f);
-			image1.sprite = SpriteArray[currentImage];
-			timer1Remaining = timer1;
-			timer1IsRunning = true;
-		}
-
 	}
 
+	public void PreviousImage()
+    {
+		UnityEngine.Debug.Log("Pressed Left.");
+		--currentImage;
+
+		if (currentImage < 0)
+			currentImage = SpriteArray.Length-1;
+
+		fade();
+	}
+
+	public void NextImage()
+    {
+		UnityEngine.Debug.Log("Pressed Right.");
+		currentImage++;
+
+		if (currentImage >= SpriteArray.Length)
+			currentImage = 0;
+		fade();
+	}
+
+
+	public void fade()
+    {
+		image1.canvasRenderer.SetAlpha(0.0f);
+		image1.sprite = SpriteArray[currentImage];
+		timer1Remaining = timer1;
+		timer1IsRunning = true;
+	}
 
 }
