@@ -1341,11 +1341,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1026865204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85670fdcaaa4b4046af6dd0a329f947d, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b54699266be59e42ae2702defe07f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image1: {fileID: 1111491599}
-  SpriteArray:
+  BackUpSpriteArray:
   - {fileID: 21300000, guid: e05db68655e95fe4a8f3fcd2f1b8eea6, type: 3}
   - {fileID: 21300000, guid: ed22ef34459257347b4811dc493e7378, type: 3}
   - {fileID: 21300000, guid: 451479d6ad78d3a4ab81f45cd36f78d4, type: 3}
