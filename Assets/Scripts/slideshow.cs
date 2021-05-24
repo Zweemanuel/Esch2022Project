@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using System.IO;
 
 
-public class SlideShow : MonoBehaviour
+public class slideshow : MonoBehaviour
 {
 
 	public Image image1;
@@ -29,7 +29,7 @@ public class SlideShow : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		SpriteArray = SlideShow.loadSprites();
+		SpriteArray = slideshow.loadSprites();
 		if (SpriteArray.Length < 4)
         {
 			SpriteArray = BackUpSpriteArray;
