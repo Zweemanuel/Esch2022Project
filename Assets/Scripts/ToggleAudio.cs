@@ -6,14 +6,18 @@ using UnityEngine.UI;
 public class ToggleAudio : MonoBehaviour
 {
     private bool toggle = true;
-    public void ChangeTextOnClick(Text textfield)
+    public Text mytext;
+
+    // Update is called once per frame
+    void Update()
     {
-        if (textfield.text == "On" )
+        if (AudioListener.volume == 1f)
         {
-            textfield.text = "Off";
-        } else if (textfield.text == "Off" )
+            mytext.text = "On";
+        }
+        else if (AudioListener.volume == 0f)
         {
-            textfield.text = "On";
+            mytext.text = "Off";
         }
     }
 
