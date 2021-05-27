@@ -35,45 +35,46 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TestMap : MonoBehaviour
 {
-	private MapBehaviour		map;
-	
-	public Texture	LocationTexture;
-	public Texture	MarkerTexture;
-	
-	private float	guiXScale;
-	private float	guiYScale;
-	private Rect	guiRect;
-	
-	private bool 	isPerspectiveView = false;
-	private float	perspectiveAngle = 30.0f;
-	private float	destinationAngle = 0.0f;
-	private float	currentAngle = 0.0f;
-	private float	animationDuration = 0.5f;
-	private float	animationStartTime = 0.0f;
+    private MapBehaviour map;
+
+    public Texture LocationTexture;
+    public Texture MarkerTexture;
+
+    private float guiXScale;
+    private float guiYScale;
+    private Rect guiRect;
+
+    private bool isPerspectiveView = false;
+    private float perspectiveAngle = 30.0f;
+    private float destinationAngle = 0.0f;
+    private float currentAngle = 0.0f;
+    private float animationDuration = 0.5f;
+    private float animationStartTime = 0.0f;
 
     private List<LayerBehaviour> layers;
-    private int     currentLayerIndex = 0;
+    private int currentLayerIndex = 0;
 
     private string utfGridJsonString = "";
 
-	bool Toolbar(MapBehaviour map)
-	{
-		GUI.matrix = Matrix4x4.Scale(new Vector3(guiXScale, guiXScale, 1.0f));
-		
-		GUILayout.BeginArea(guiRect);
-		
-		GUILayout.BeginHorizontal();
-		
-		
-		bool pressed = false;
+    bool Toolbar(MapBehaviour map)
+    {
+        GUI.matrix = Matrix4x4.Scale(new Vector3(guiXScale, guiXScale, 1.0f));
+
+        GUILayout.BeginArea(guiRect);
+
+        GUILayout.BeginHorizontal();
+
+
+        bool pressed = false;
         if (GUILayout.RepeatButton("x", GUILayout.ExpandHeight(true)))
-		{
-			SceneManager.LoadScene(0);
-			pressed = true;
-		}
+        {
+            SceneManager.LoadScene(0);
+            pressed = true;
+        }
         if (Event.current.type == EventType.Repaint)
         {
             Rect rect = GUILayoutUtility.GetLastRect();
@@ -148,48 +149,60 @@ public class TestMap : MonoBehaviour
             if (rect.Contains(Event.current.mousePosition))
                 pressed = true;
         }*/
-		
-		GUILayout.EndHorizontal();
-					
-		GUILayout.EndArea();
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndArea();
 
         // Show any mbtiles utf string under the mouse position
         if (!string.IsNullOrEmpty(utfGridJsonString))
             GUILayout.Label(utfGridJsonString);
 
-		return pressed;
+        return pressed;
 
-	}
-	
-	private IEnumerator Start()
-	{
+    }
+
+    private IEnumerator Start()
+    {
         // setup the gui scale according to the screen resolution
         guiXScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.width : Screen.height) / 480.0f;
         guiYScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.height : Screen.width) / 640.0f;
-		// setup the gui area
-		guiRect = new Rect(16.0f * guiXScale, 4.0f * guiXScale, Screen.width / guiXScale - 32.0f * guiXScale, 32.0f * guiYScale);
+        // setup the gui area
+        guiRect = new Rect(16.0f * guiXScale, 4.0f * guiXScale, Screen.width / guiXScale - 32.0f * guiXScale, 32.0f * guiYScale);
 
-		// create the map singleton
-		map = MapBehaviour.Instance;
-		map.CurrentCamera = Camera.main;
-		map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
-		map.CurrentZoom = 19.0f;
-		map.CenterWGS84 = new double[2] { 5.94780, 49.50478 };
-		map.UsesLocation = true;
-		map.InputsEnabled = true;
-		map.ShowsGUIControls = true;
+        // create the map singleton
+        map = MapBehaviour.Instance;
+        map.CurrentCamera = Camera.main;
+        map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
+        map.CurrentZoom = 19.0f;
+        //map.CenterWGS84 = new double[2] { 5.94780, 49.50478 };
 
-		map.GUIDelegate += Toolbar;
+        //TEST Centralize the map
+        //current location thingy
+		GPS locationGiver = new GPS();
+        float longitude = locationGiver.longtitude;
+        float latitude = locationGiver.latitude;
+
+        Text myText = GameObject.Find("Canvas/Text").GetComponent<Text>();
+        myText.text = "longitude :" + longitude + " latitude : " + latitude;
+        map.CenterWGS84 = new double[2] {latitude, longitude};
+        //Test END
+
+        map.UsesLocation = true;
+        map.InputsEnabled = true;
+        map.ShowsGUIControls = true;
+
+        map.GUIDelegate += Toolbar;
 
         layers = new List<LayerBehaviour>();
 
-		// create an OSM tile layer
+        // create an OSM tile layer
         OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer>("OSM");
         osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
-		
+
         layers.Add(osmLayer);
 
-		// create a VirtualEarth tile layer
+        // create a VirtualEarth tile layer
         /*VirtualEarthTileLayerBehaviour virtualEarthLayer = map.CreateLayer<VirtualEarthTileLayerBehaviour>("VirtualEarth");
         // Note: this is the key UnitySlippyMap, DO NOT use it for any other purpose than testing
         virtualEarthLayer.Key = "ArgkafZs0o_PGBuyg468RaapkeIQce996gkyCe8JN30MjY92zC_2hcgBU_rHVUwT";
@@ -202,52 +215,52 @@ public class TestMap : MonoBehaviour
 
         layers.Add(virtualEarthLayer);*/
 
-		// create an MBTiles tile layer
-		bool error = false;
-		// on iOS, you need to add the db file to the Xcode project using a directory reference
-		string mbTilesDir = "MBTiles/";
-		//string filename = "UnitySlippyMap_World_0_8.mbtiles";
+        // create an MBTiles tile layer
+        bool error = false;
+        // on iOS, you need to add the db file to the Xcode project using a directory reference
+        string mbTilesDir = "MBTiles/";
+        //string filename = "UnitySlippyMap_World_0_8.mbtiles";
         string filename = "CountryMapWithUTfData.mbtiles";
-		string filepath = null;
-		if (Application.platform == RuntimePlatform.IPhonePlayer)
-		{
-			filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-		}
-		else if (Application.platform == RuntimePlatform.Android)
-		{
-			// Note: Android is a bit tricky, Unity produces APK files and those are never unzip on the device.
-			// Place your MBTiles file in the StreamingAssets folder (http://docs.unity3d.com/Documentation/Manual/StreamingAssets.html).
-			// Then you need to access the APK on the device with WWW and copy the file to persitentDataPath
-			// to that it can be read by SqliteDatabase as an individual file
-			string newfilepath = Application.temporaryCachePath + "/" + filename;
-			if (File.Exists(newfilepath) == false)
-			{
-				Debug.Log("DEBUG: file doesn't exist: " + newfilepath);
-				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-				// TODO: read the file with WWW and write it to persitentDataPath
-				WWW loader = new WWW(filepath);
-				yield return loader;
-				if (loader.error != null)
-				{
-					Debug.LogError("ERROR: " + loader.error);
-					error = true;
-				}
-				else
-				{
-					Debug.Log("DEBUG: will write: '" + filepath + "' to: '" + newfilepath + "'");
-					File.WriteAllBytes(newfilepath, loader.bytes);
-				}
-			}
-			else
-				Debug.Log("DEBUG: exists: " + newfilepath);
-			filepath = newfilepath;
-		}
+        string filepath = null;
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+        }
+        else if (Application.platform == RuntimePlatform.Android)
+        {
+            // Note: Android is a bit tricky, Unity produces APK files and those are never unzip on the device.
+            // Place your MBTiles file in the StreamingAssets folder (http://docs.unity3d.com/Documentation/Manual/StreamingAssets.html).
+            // Then you need to access the APK on the device with WWW and copy the file to persitentDataPath
+            // to that it can be read by SqliteDatabase as an individual file
+            string newfilepath = Application.temporaryCachePath + "/" + filename;
+            if (File.Exists(newfilepath) == false)
+            {
+                Debug.Log("DEBUG: file doesn't exist: " + newfilepath);
+                filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+                // TODO: read the file with WWW and write it to persitentDataPath
+                WWW loader = new WWW(filepath);
+                yield return loader;
+                if (loader.error != null)
+                {
+                    Debug.LogError("ERROR: " + loader.error);
+                    error = true;
+                }
+                else
+                {
+                    Debug.Log("DEBUG: will write: '" + filepath + "' to: '" + newfilepath + "'");
+                    File.WriteAllBytes(newfilepath, loader.bytes);
+                }
+            }
+            else
+                Debug.Log("DEBUG: exists: " + newfilepath);
+            filepath = newfilepath;
+        }
         else
-		{
-			filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-		}
-		
-		/*if (error == false)
+        {
+            filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+        }
+
+        /*if (error == false)
 		{
             Debug.Log("DEBUG: using MBTiles file: " + filepath);
 			MBTilesLayerBehaviour mbTilesLayer = map.CreateLayer<MBTilesLayerBehaviour>("MBTiles");
@@ -264,80 +277,81 @@ public class TestMap : MonoBehaviour
             Debug.LogError("ERROR: MBTiles file not found!");
 		*/
         // create some test 2D markers
-		GameObject go = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
-		go.GetComponent<Renderer>().material.mainTexture = MarkerTexture;
-		go.GetComponent<Renderer>().material.renderQueue = 4001;
-		go.transform.localScale = new Vector3(0.70588235294118f, 1.0f, 1.0f);
-		go.transform.localScale /= 7.0f;
+        GameObject go = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+        go.GetComponent<Renderer>().material.mainTexture = MarkerTexture;
+        go.GetComponent<Renderer>().material.renderQueue = 4001;
+        go.transform.localScale = new Vector3(0.70588235294118f, 1.0f, 1.0f);
+        go.transform.localScale /= 7.0f;
         go.AddComponent<CameraFacingBillboard>().Axis = Vector3.up;
-		
-		GameObject markerGO;
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Maison du Savoir", new double[2] {5.94919, 49.50424}, markerGO);
 
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Learning Center", new double[2] { 5.94744, 49.50223 }, markerGO);
-		
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Rock Haal", new double[2] { 5.94754, 49.50033 }, markerGO);
+        GameObject markerGO;
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Maison du Savoir", new double[2] { 5.94919, 49.50424 }, markerGO);
 
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Haut Fourneau", new double[2] { 5.94820 , 49.50125 }, markerGO);
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Learning Center", new double[2] { 5.94744, 49.50223 }, markerGO);
 
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Belval Plaza", new double[2] { 5.94551 , 49.50091 }, markerGO);
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Rock Haal", new double[2] { 5.94754, 49.50033 }, markerGO);
 
-		markerGO = Instantiate(go) as GameObject;
-		map.CreateMarker<MarkerBehaviour>("Ruines", new double[2] { 5.94909 , 49.50338 }, markerGO);
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Haut Fourneau", new double[2] { 5.94820, 49.50125 }, markerGO);
 
-		DestroyImmediate(go);
-		
-		// create the location marker
-		go = TileBehaviour.CreateTileTemplate().gameObject;
-		go.GetComponent<Renderer>().material.mainTexture = LocationTexture;
-		go.GetComponent<Renderer>().material.renderQueue = 4000;
-		go.transform.localScale /= 27.0f;
-		
-		markerGO = Instantiate(go) as GameObject;
-		map.SetLocationMarker<LocationMarkerBehaviour>(markerGO);
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Belval Plaza", new double[2] { 5.94551, 49.50091 }, markerGO);
 
-		DestroyImmediate(go);
-	}
-	
-	void OnApplicationQuit()
-	{
-		map = null;
-	}
-	
-	void Update()
-	{
-		if (destinationAngle != 0.0f)
-		{
-			Vector3 cameraLeft = Quaternion.AngleAxis(-90.0f, Camera.main.transform.up) * Camera.main.transform.forward;
-			if ((Time.time - animationStartTime) < animationDuration)
-			{
-				float angle = Mathf.LerpAngle(0.0f, destinationAngle, (Time.time - animationStartTime) / animationDuration);
-				Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, angle - currentAngle);
-				currentAngle = angle;
-			}
-			else
-			{
-				Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, destinationAngle - currentAngle);
-				destinationAngle = 0.0f;
-				currentAngle = 0.0f;
-				map.IsDirty = true;
-			}
-			
-			map.HasMoved = true;
-		}
+        markerGO = Instantiate(go) as GameObject;
+        map.CreateMarker<MarkerBehaviour>("Ruines", new double[2] { 5.94909, 49.50338 }, markerGO);
+
+        DestroyImmediate(go);
+
+        // create the location marker
+        go = TileBehaviour.CreateTileTemplate().gameObject;
+        go.GetComponent<Renderer>().material.mainTexture = LocationTexture;
+        go.GetComponent<Renderer>().material.renderQueue = 4000;
+        go.transform.localScale /= 27.0f;
+
+        markerGO = Instantiate(go) as GameObject;
+        map.SetLocationMarker<LocationMarkerBehaviour>(markerGO);
+
+        DestroyImmediate(go);
+    }
+
+    void OnApplicationQuit()
+    {
+        map = null;
+    }
+
+    void Update()
+    {
+        if (destinationAngle != 0.0f)
+        {
+            Vector3 cameraLeft = Quaternion.AngleAxis(-90.0f, Camera.main.transform.up) * Camera.main.transform.forward;
+            if ((Time.time - animationStartTime) < animationDuration)
+            {
+                float angle = Mathf.LerpAngle(0.0f, destinationAngle, (Time.time - animationStartTime) / animationDuration);
+                Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, angle - currentAngle);
+                currentAngle = angle;
+            }
+            else
+            {
+                Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, destinationAngle - currentAngle);
+                destinationAngle = 0.0f;
+                currentAngle = 0.0f;
+                map.IsDirty = true;
+            }
+
+            map.HasMoved = true;
+        }
 
         // if (Input.GetMouseButtonDown(0))
         foreach (LayerBehaviour _lb in layers)
             if (_lb.GetType() == typeof(MBTilesLayerBehaviour))
                 utfGridJsonString = ((MBTilesLayerBehaviour)_lb).UtfGridJsonString();
 
-	}
-	
+
+    }
+
 #if DEBUG_PROFILE
 	void LateUpdate()
 	{

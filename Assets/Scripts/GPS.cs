@@ -10,14 +10,15 @@ public class GPS : MonoBehaviour
     public float latitude;
     public float longtitude;
 
-    private void Start()
+    public void Start()
     {
-        StartCoroutine(StartLocationService());
+        UnityEngine.Debug.Log("Trying GPS/Started");
+        StartCoroutine(StartLocationService());    
     }
 
     private IEnumerator StartLocationService()
     {
-        if(Input.location.isEnabledByUser)
+        if(!Input.location.isEnabledByUser)
         {
             Debug.Log("User has not enabled GPS");
             yield break;
@@ -41,6 +42,7 @@ public class GPS : MonoBehaviour
             yield break;
         }
 
+        UnityEngine.Debug.Log("Getting Location");
         latitude = Input.location.lastData.latitude;
         longtitude = Input.location.lastData.longitude;
 
